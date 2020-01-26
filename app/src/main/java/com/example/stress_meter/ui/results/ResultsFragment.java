@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import lecho.lib.hellocharts.model.Axis;
+import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
@@ -45,7 +47,17 @@ public class ResultsFragment extends Fragment {
         LineChartData data = new LineChartData();
         data.setLines(lines);
 
+        Axis axisX = new Axis();
+        axisX.setName("Instances.");
+
+        Axis axisY = new Axis();
+        axisY.setName("Stress Level");
+
+        data.setAxisXBottom(axisX);
+        data.setAxisYLeft(axisY);
+
         LineChartView chart = root.findViewById(R.id.chart);
+
         chart.setLineChartData(data);
         return root;
     }
