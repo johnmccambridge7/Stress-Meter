@@ -1,5 +1,12 @@
 package com.example.stress_meter;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.media.MediaPlayer;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -21,6 +28,8 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 
+import java.util.Calendar;
+
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -31,6 +40,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        PSMScheduler scheduler = new PSMScheduler();
+        scheduler.setSchedule(getApplicationContext());
+
+        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+        r.play();
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);

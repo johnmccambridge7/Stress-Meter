@@ -1,9 +1,13 @@
 package com.example.stress_meter.ui.home;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +25,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.stress_meter.Classifications;
+import com.example.stress_meter.EMAAlarmReceiver;
 import com.example.stress_meter.ImageConfirmationActivity;
 import com.example.stress_meter.ImagesAdapter;
 import com.example.stress_meter.PSM;
@@ -38,6 +43,7 @@ public class HomeFragment extends Fragment {
     private Button moreImages;
     private UpdateGridTask task;
     private int selectedIndex = 0;
+    private Classifications classifications;
 
     public class UpdateGridTask extends AsyncTask<Void, Integer[], Void> {
 
@@ -74,11 +80,21 @@ public class HomeFragment extends Fragment {
 
         public void onProgressUpdate(Integer[]... param_2) {
             Integer[] imagesBoxed = param_2[0];
-            int[] images = new int[16];
+            final int[] images = new int[16];
 
             for(int i=0; i < 16; i++) {
                 images[i] = imagesBoxed[i];
             }
+
+            grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Intent confirmIntent = new Intent(getContext(), ImageConfirmationActivity.class);
+                    confirmIntent.putExtra("image", images[i]);
+                    confirmIntent.putExtra("classification", classifications.get(images[i]));
+                    startActivity(confirmIntent);
+                }
+            });
 
             adapter = new ImagesAdapter(getContext(), images);
             grid.invalidateViews();
@@ -89,7 +105,7 @@ public class HomeFragment extends Fragment {
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final Classifications classifications = new Classifications();
+        classifications = new Classifications();
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 

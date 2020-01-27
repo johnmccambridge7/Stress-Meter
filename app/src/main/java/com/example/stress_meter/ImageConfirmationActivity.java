@@ -2,9 +2,11 @@ package com.example.stress_meter;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +30,14 @@ public class ImageConfirmationActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
+        if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    0);
+        }
+
         int imageID = intent.getIntExtra("image", 0);
         classification = String.valueOf(intent.getIntExtra("classification", -1));
 
@@ -42,7 +52,7 @@ public class ImageConfirmationActivity extends AppCompatActivity {
 
     public void submit(View view) throws IOException {
         // get the stress level - DONE
-        // write to a csv
+        // write to a csv - DONE
         // construct graph lib - DONE
         // draw the graph - DONE
         // schedule the alerts
@@ -51,7 +61,7 @@ public class ImageConfirmationActivity extends AppCompatActivity {
         String timestamp = timestampLong.toString();
 
         String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
-        String fileName = "stress-levels.csv";
+        String fileName = getString(R.string.stressFileName);
         String path = baseDir + File.separator + fileName;
 
         File file = new File(path);
@@ -70,5 +80,6 @@ public class ImageConfirmationActivity extends AppCompatActivity {
         String[] packet = {timestamp, classification};
         writer.writeNext(packet);
         writer.close();
+        finish();
     }
 }
