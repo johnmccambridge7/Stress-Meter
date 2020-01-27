@@ -14,8 +14,8 @@ import java.util.Calendar;
 public class PSMScheduler {
 
     public static void setSchedule(Context context) {
-        //setSchedule(context,0,0,45);
-        setSchedule(context, 4, 30, 0);
+        setSchedule(context,12,30,0);
+        setSchedule(context, 18, 30, 0);
     }
 
     private static void setSchedule(Context context, int hour, int min, int sec) {
@@ -36,12 +36,8 @@ public class PSMScheduler {
             calendar.add(Calendar.DATE, 1);
         }
 
-        // set repeating alarm, and pass the pending intent,
-        // so that the broadcast is sent everytime the alarm
-        // is triggered
-
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 10000,
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, pi);
     }
 

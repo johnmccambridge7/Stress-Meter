@@ -82,6 +82,6 @@ public class ImageConfirmationActivity extends AppCompatActivity {
         writer.writeNext(packet);
         writer.close();
 
-        finishAndRemoveTask();
+        this.finishAffinity();
     }
 }
